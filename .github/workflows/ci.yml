@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_sqlite, sqlite3
+          coverage: none
+
+      - name: Installer les dépendances
+        working-directory: src
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Configurer l'environnement
+        working-directory: src
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Migrer la base de données
+        working-directory: src
+        run: php artisan migrate --force
+
+      - name: Lancer les tests
+        working-directory: src
+        run: php artisan test
