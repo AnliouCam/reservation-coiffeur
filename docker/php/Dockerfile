@@ -59,7 +59,7 @@ COPY --from=builder --chown=laravel:laravel /var/www .
 # Config PHP personnalisee
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 
-RUN chown -R laravel:laravel storage bootstrap/cache
+RUN chown -R laravel:laravel storage bootstrap/cache app database
 
 USER laravel
 
