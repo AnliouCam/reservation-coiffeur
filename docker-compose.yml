@@ -1,0 +1,84 @@
+services:
+
+  # ─────────────────────────────────────────
+  # NGINX - le serveur web qui recoit les requetes
+  # ─────────────────────────────────────────
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - laravel
+
+  # ─────────────────────────────────────────
+  # PHP-FPM - fait tourner le code Laravel
+  # ─────────────────────────────────────────
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - ./src:/var/www
+    networks:
+      - laravel
+    depends_on:
+      - mysql
+      - redis
+
+  # ─────────────────────────────────────────
+  # MYSQL - la base de donnees
+  # ─────────────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - laravel
+
+  # ─────────────────────────────────────────
+  # REDIS - cache et sessions
+  # ─────────────────────────────────────────
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis_data:/data
+    networks:
+      - laravel
+
+  # ─────────────────────────────────────────
+  # ADMINER - interface graphique pour la DB
+  # ─────────────────────────────────────────
+  adminer:
+    image: adminer
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mysql
+    networks:
+      - laravel
+
+# ─────────────────────────────────────────
+# VOLUMES - donnees persistantes (Module 4)
+# ─────────────────────────────────────────
+volumes:
+  mysql_data:
+  redis_data:
+
+# ─────────────────────────────────────────
+# NETWORKS - reseau interne entre containers
+# ─────────────────────────────────────────
+networks:
+  laravel:
+    driver: bridge
