@@ -42,11 +42,13 @@ RUN apk add --no-cache \
     oniguruma \
     libxml2 \
     lz4-libs \
-    libavif
+    libavif \
+    git
 
 # On copie les extensions deja compilees depuis le builder
 COPY --from=builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Securite : utilisateur non-root
 RUN addgroup -g 1000 laravel && adduser -u 1000 -G laravel -s /bin/sh -D laravel
@@ -59,7 +61,7 @@ COPY --from=builder --chown=laravel:laravel /var/www .
 # Config PHP personnalisee
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 
-RUN chown -R laravel:laravel storage bootstrap/cache app database
+RUN chown -R laravel:laravel /var/www
 
 USER laravel
 
