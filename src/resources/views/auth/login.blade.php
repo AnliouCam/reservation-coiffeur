@@ -3,34 +3,31 @@
 @section('title', 'Connexion Admin — Salon de Coiffure')
 
 @section('content')
-    <div style="max-width: 400px; margin: 0 auto;">
-        <h1 style="margin-bottom: 8px;">Connexion Admin</h1>
-        <p style="color: #666; margin-bottom: 32px;">Accès réservé aux administrateurs.</p>
+    <div class="max-w-md mx-auto">
+        <h1 class="text-3xl font-bold mb-2">Connexion Admin</h1>
+        <p class="text-gray-500 mb-8">Accès réservé aux administrateurs.</p>
 
         @if($errors->any())
-            <div style="background: #fee; border: 1px solid #fcc; padding: 16px; border-radius: 6px; margin-bottom: 24px;">
+            <div class="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-6">
                 @foreach($errors->all() as $error)
-                    <p style="color: #c00;">{{ $error }}</p>
+                    <p>{{ $error }}</p>
                 @endforeach
             </div>
         @endif
 
-        <form method="POST" action="/login" style="background: white; padding: 32px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
+        <form method="POST" action="/login" class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 space-y-5">
             @csrf
-
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 6px;">Email</label>
+            <div>
+                <label class="block font-semibold mb-1 text-sm">Email</label>
                 <input type="email" name="email" value="{{ old('email') }}" required autofocus
-                       style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;">
+                       class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
             </div>
-
-            <div style="margin-bottom: 28px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 6px;">Mot de passe</label>
+            <div>
+                <label class="block font-semibold mb-1 text-sm">Mot de passe</label>
                 <input type="password" name="password" required
-                       style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;">
+                       class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
             </div>
-
-            <button type="submit" class="btn" style="width: 100%; text-align: center;">
+            <button type="submit" class="w-full bg-gray-900 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition">
                 Se connecter
             </button>
         </form>

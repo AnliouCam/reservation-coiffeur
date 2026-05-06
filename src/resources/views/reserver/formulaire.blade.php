@@ -3,44 +3,46 @@
 @section('title', 'Formulaire de réservation — Salon de Coiffure')
 
 @section('content')
-    <h1 style="margin-bottom: 4px;">Vos informations</h1>
-    <p style="color: #666; margin-bottom: 32px;">
-        {{ $service->nom }} — {{ \Carbon\Carbon::parse($creneau->date)->format('d/m/Y') }} à {{ \Carbon\Carbon::parse($creneau->heure)->format('H\hi') }}
-    </p>
+    <div class="max-w-lg mx-auto">
+        <h1 class="text-3xl font-bold mb-1">Vos informations</h1>
+        <p class="text-gray-500 mb-8">
+            {{ $service->nom }} — {{ \Carbon\Carbon::parse($creneau->date)->format('d/m/Y') }} à {{ \Carbon\Carbon::parse($creneau->heure)->format('H\hi') }}
+        </p>
 
-    @if($errors->any())
-        <div style="background: #fee; border: 1px solid #fcc; padding: 16px; border-radius: 6px; margin-bottom: 24px;">
-            @foreach($errors->all() as $error)
-                <p style="color: #c00;">{{ $error }}</p>
-            @endforeach
-        </div>
-    @endif
+        @if($errors->any())
+            <div class="bg-red-50 border border-red-200 text-red-700 rounded-lg p-4 mb-6">
+                @foreach($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
 
-    <form method="POST" action="/reserver/formulaire" style="max-width: 480px;">
-        @csrf
-        <input type="hidden" name="service_id" value="{{ $service->id }}">
-        <input type="hidden" name="creneau_id" value="{{ $creneau->id }}">
+        <form method="POST" action="/reserver/formulaire" class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 space-y-5">
+            @csrf
+            <input type="hidden" name="service_id" value="{{ $service->id }}">
+            <input type="hidden" name="creneau_id" value="{{ $creneau->id }}">
 
-        <div style="margin-bottom: 20px;">
-            <label style="display: block; font-weight: bold; margin-bottom: 6px;">Nom complet</label>
-            <input type="text" name="client_nom" value="{{ old('client_nom') }}" required
-                   style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;">
-        </div>
+            <div>
+                <label class="block font-semibold mb-1 text-sm">Nom complet</label>
+                <input type="text" name="client_nom" value="{{ old('client_nom') }}" required
+                       class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
+            </div>
 
-        <div style="margin-bottom: 20px;">
-            <label style="display: block; font-weight: bold; margin-bottom: 6px;">Email</label>
-            <input type="email" name="client_email" value="{{ old('client_email') }}" required
-                   style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;">
-        </div>
+            <div>
+                <label class="block font-semibold mb-1 text-sm">Email</label>
+                <input type="email" name="client_email" value="{{ old('client_email') }}" required
+                       class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
+            </div>
 
-        <div style="margin-bottom: 28px;">
-            <label style="display: block; font-weight: bold; margin-bottom: 6px;">Téléphone</label>
-            <input type="text" name="client_telephone" value="{{ old('client_telephone') }}" required
-                   style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;">
-        </div>
+            <div>
+                <label class="block font-semibold mb-1 text-sm">Téléphone</label>
+                <input type="text" name="client_telephone" value="{{ old('client_telephone') }}" required
+                       class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
+            </div>
 
-        <button type="submit" class="btn" style="width: 100%; text-align: center;">
-            Confirmer la réservation
-        </button>
-    </form>
+            <button type="submit" class="w-full bg-gray-900 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition">
+                Confirmer la réservation
+            </button>
+        </form>
+    </div>
 @endsection
