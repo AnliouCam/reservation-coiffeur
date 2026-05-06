@@ -16,6 +16,9 @@ Route::get('/reserver/confirmation', [ReservationController::class, 'confirmatio
 Route::middleware('auth')->group(function () {
     Route::get('/admin', [AdminController::class, 'index']);
     Route::patch('/admin/reservations/{reservation}/statut', [AdminController::class, 'updateStatut']);
+    Route::get('/admin/creneaux', [AdminController::class, 'creneaux']);
+    Route::post('/admin/creneaux', [AdminController::class, 'storeCreneau']);
+    Route::patch('/admin/creneaux/{creneau}/toggle', [AdminController::class, 'toggleCreneau']);
 });
 
 require __DIR__.'/auth.php';

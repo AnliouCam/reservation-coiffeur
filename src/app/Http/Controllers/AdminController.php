@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Creneau;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,39 @@ class AdminController extends Controller
         ]);
 
         $reservation->update(['statut' => $request->statut]);
+
+        return back();
+    }
+
+    public function creneaux(Request $request)
+    {
+        $date = $request->date ?? today()->format('Y-m-d');
+
+        $creneaux = Creneau::where('date', $date)
+            ->orderBy('heure')
+            ->get();
+
+        return view('admin.creneaux', compact('creneaux', 'date'));
+    }
+
+    public function storeCreneau(Request $request)
+    {
+        $request->validate([
+            'date'  => 'required|date',
+            'heure' => 'required',
+        ]);
+
+        Creneau::firstOrCreate([
+            'date'  => $request->date,
+            'heure' => $request->heure,
+        ], ['disponible' => true]);
+
+        return back();
+    }
+
+    public function toggleCreneau(Creneau $creneau)
+    {
+        $creneau->update(['disponible' => !$creneau->disponible]);
 
         return back();
     }

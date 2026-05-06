@@ -4,7 +4,10 @@
 
 @section('content')
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
-        <h1>Tableau de bord</h1>
+        <div style="display: flex; align-items: center; gap: 24px;">
+            <h1>Tableau de bord</h1>
+            <a href="/admin/creneaux" style="color: #666; text-decoration: none; font-size: 0.95rem;">Gérer les créneaux →</a>
+        </div>
         <form method="GET" action="/admin" style="display: flex; gap: 12px; align-items: center;">
             <input type="date" name="date" value="{{ $date }}"
                    style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;">
