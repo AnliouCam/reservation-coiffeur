@@ -5,35 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Salon de Coiffure')</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f9f9f9; color: #333; }
-        header { background: #1a1a1a; color: white; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
-        header a { color: white; text-decoration: none; font-size: 1.4rem; font-weight: bold; }
-        nav a { color: #ccc; text-decoration: none; margin-left: 24px; }
-        nav a:hover { color: white; }
-        main { max-width: 960px; margin: 40px auto; padding: 0 24px; }
-        .btn { display: inline-block; background: #1a1a1a; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-size: 1rem; cursor: pointer; border: none; }
-        .btn:hover { background: #333; }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <header>
-        <a href="/">Salon de Coiffure</a>
-        <nav>
-            <a href="/">Accueil</a>
-            <a href="/reserver">Réserver</a>
+<body class="bg-gray-50 text-gray-800 min-h-screen">
+
+    <header class="bg-gray-900 text-white px-8 py-4 flex justify-between items-center shadow">
+        <a href="/" class="text-xl font-bold tracking-wide">Salon de Coiffure</a>
+        <nav class="flex items-center gap-6 text-sm">
+            <a href="/" class="text-gray-300 hover:text-white transition">Accueil</a>
+            <a href="/reserver" class="text-gray-300 hover:text-white transition">Réserver</a>
             @auth
-                <a href="/admin">Admin</a>
-                <form method="POST" action="/logout" style="display:inline;">
+                <a href="/admin" class="text-gray-300 hover:text-white transition">Admin</a>
+                <form method="POST" action="/logout" class="inline">
                     @csrf
-                    <button type="submit" style="background:none; border:none; color:#ccc; cursor:pointer; font-size:1rem; margin-left:24px;">Déconnexion</button>
+                    <button type="submit" class="text-gray-300 hover:text-white transition cursor-pointer bg-transparent border-none text-sm">
+                        Déconnexion
+                    </button>
                 </form>
             @endauth
         </nav>
     </header>
-    <main>
+
+    <main class="max-w-5xl mx-auto px-6 py-10">
         @yield('content')
     </main>
+
 </body>
 </html>

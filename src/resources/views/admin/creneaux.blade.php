@@ -3,77 +3,67 @@
 @section('title', 'Gestion des créneaux — Admin')
 
 @section('content')
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
-        <h1>Gestion des créneaux</h1>
-        <a href="/admin" style="color: #666; text-decoration: none;">← Retour au dashboard</a>
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">Gestion des créneaux</h1>
+        <a href="/admin" class="text-sm text-gray-500 hover:text-gray-900 transition">← Retour au dashboard</a>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-        {{-- Formulaire ajout créneau --}}
-        <div style="background: white; padding: 24px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
-            <h2 style="margin-bottom: 20px;">Ajouter des créneaux</h2>
-            <form method="POST" action="/admin/creneaux">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+            <h2 class="text-lg font-bold mb-6">Ajouter un créneau</h2>
+            <form method="POST" action="/admin/creneaux" class="space-y-4">
                 @csrf
-                <div style="margin-bottom: 16px;">
-                    <label style="display: block; font-weight: bold; margin-bottom: 6px;">Date</label>
+                <div>
+                    <label class="block font-semibold mb-1 text-sm">Date</label>
                     <input type="date" name="date" value="{{ $date }}" required
-                           style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;">
+                           class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
                 </div>
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; font-weight: bold; margin-bottom: 6px;">Heure</label>
-                    <select name="heure" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;">
+                <div>
+                    <label class="block font-semibold mb-1 text-sm">Heure</label>
+                    <select name="heure" required class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
                         @for($h = 9; $h <= 17; $h++)
                             <option value="{{ str_pad($h, 2, '0', STR_PAD_LEFT) }}:00:00">{{ str_pad($h, 2, '0', STR_PAD_LEFT) }}h00</option>
                             <option value="{{ str_pad($h, 2, '0', STR_PAD_LEFT) }}:30:00">{{ str_pad($h, 2, '0', STR_PAD_LEFT) }}h30</option>
                         @endfor
                     </select>
                 </div>
-                <button type="submit" class="btn" style="width: 100%; text-align: center;">Ajouter</button>
+                <button type="submit" class="w-full bg-gray-900 text-white py-2 rounded-lg text-sm font-semibold hover:bg-gray-700 transition">
+                    Ajouter
+                </button>
             </form>
         </div>
 
-        {{-- Liste des créneaux du jour --}}
         <div>
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
-                <h2>Créneaux du</h2>
-                <form method="GET" action="/admin/creneaux" style="display: flex; gap: 8px;">
+            <div class="flex items-center gap-4 mb-6">
+                <h2 class="text-lg font-bold">Créneaux du</h2>
+                <form method="GET" action="/admin/creneaux" class="flex gap-2">
                     <input type="date" name="date" value="{{ $date }}"
-                           style="padding: 6px 10px; border: 1px solid #ccc; border-radius: 6px;">
-                    <button type="submit" class="btn" style="padding: 6px 14px;">OK</button>
+                           class="border border-gray-300 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
+                    <button type="submit" class="bg-gray-900 text-white px-3 py-1 rounded-lg text-sm hover:bg-gray-700 transition">OK</button>
                 </form>
             </div>
 
             @if($creneaux->isEmpty())
-                <p style="color: #888;">Aucun créneau pour cette date.</p>
+                <p class="text-gray-400 text-sm">Aucun créneau pour cette date.</p>
             @else
-                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                <div class="flex flex-wrap gap-3">
                     @foreach($creneaux as $creneau)
                         <form method="POST" action="/admin/creneaux/{{ $creneau->id }}/toggle">
                             @csrf
                             @method('PATCH')
-                            <button type="submit" style="
-                                padding: 10px 18px;
-                                border-radius: 6px;
-                                border: 2px solid {{ $creneau->disponible ? '#1a1a1a' : '#ccc' }};
-                                background: {{ $creneau->disponible ? '#1a1a1a' : '#f5f5f5' }};
-                                color: {{ $creneau->disponible ? 'white' : '#999' }};
-                                cursor: pointer;
-                                font-size: 1rem;
-                            ">
+                            <button type="submit" class="px-5 py-2 rounded-lg font-semibold text-sm border-2 transition
+                                {{ $creneau->disponible
+                                    ? 'bg-gray-900 text-white border-gray-900 hover:bg-gray-700'
+                                    : 'bg-gray-100 text-gray-400 border-gray-200 hover:bg-gray-200' }}">
                                 {{ \Carbon\Carbon::parse($creneau->heure)->format('H\hi') }}
                                 @if(!$creneau->disponible) 🔒 @endif
                             </button>
                         </form>
                     @endforeach
                 </div>
-                <p style="color: #888; font-size: 0.85rem; margin-top: 12px;">Cliquer sur un créneau pour le bloquer/débloquer.</p>
+                <p class="text-gray-400 text-xs mt-4">Cliquer sur un créneau pour le bloquer / débloquer.</p>
             @endif
         </div>
-    </div>
-
-    {{-- Lien dans le dashboard --}}
-    <div style="margin-top: 40px;">
-        <a href="/admin/creneaux" class="btn">Gérer les créneaux</a>
     </div>
 @endsection
