@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Creneau extends Model
 {
+    protected $table = 'creneaux';
+
     protected $fillable = ['date', 'heure', 'disponible'];
 
     protected $casts = [
