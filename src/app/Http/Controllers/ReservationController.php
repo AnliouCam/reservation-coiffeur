@@ -41,4 +41,11 @@ class ReservationController extends Controller
 
         return redirect("/reserver/confirmation?reservation={$reservation->id}");
     }
+
+    public function confirmation(Request $request)
+    {
+        $reservation = Reservation::with(['service', 'creneau'])->findOrFail($request->reservation);
+
+        return view('reserver.confirmation', compact('reservation'));
+    }
 }
